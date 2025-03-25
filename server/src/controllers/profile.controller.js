@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const getProfile = async (req, res) => {
     try {
@@ -17,4 +18,36 @@ const getProfile = async (req, res) => {
     }
 };
 
-export {getProfile}
+const addProfile = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { UserName, CompanyName, BussinessAdress, Pincode } = req.body;
+
+        if (!UserName || !CompanyName || !BussinessAdress || !Pincode) {
+            return res.status(400).send({ "message": "All fields are required" });
+        }
+
+        let logoUrl = null;
+
+        if (req.file) {
+            const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+            if (!cloudinaryResponse) {
+                return res.status(500).send({ "message": "Error uploading logo" });
+            }
+            logoUrl = cloudinaryResponse.secure_url;
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { UserName, CompanyName, BussinessAdress, Pincode, Logo: logoUrl },
+            { new: true }
+        );
+
+        return res.status(200).send({ "message": "Profile updated successfully", user: updatedUser });
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        return res.status(500).send({ "message": "Internal Server Error" });
+    }
+};
+
+export {getProfile, addProfile}
