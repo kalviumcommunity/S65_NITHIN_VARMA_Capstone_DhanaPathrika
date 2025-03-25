@@ -1,4 +1,5 @@
 import { User } from '../models/user.model.js';
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 const register = async (req, res) => {
@@ -27,7 +28,19 @@ const register = async (req, res) => {
 
         await newUser.save();
 
-        
+        let token;
+        try {
+            token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, { expiresIn: '10d' });
+        } catch (err) {
+            return res.status(500).send({ message: "Error generating token" });
+        }
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
 
         return res.status(201).send({ "message": "User created successfully" });
 
@@ -61,7 +74,15 @@ const login = async (req, res) => {
             return res.status(401).send({ "message": "Invalid credentials" });
         }
 
-        
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '10d' });
+        // console.log("token", token);
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
 
         return res.status(200).send({ "message": "Login successful", user });
 
