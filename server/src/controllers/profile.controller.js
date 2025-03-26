@@ -50,4 +50,42 @@ const addProfile = async (req, res) => {
     }
 };
 
-export {getProfile, addProfile}
+const updateProfile = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const { UserName, Email, Password, MobileNumber, BussinessAdress, CompanyName, Pincode } = req.body;
+
+        if (!UserName || !Email || !Password || !MobileNumber || !BussinessAdress || !CompanyName || !Pincode) {
+            return res.status(400).send({ "message": "All fields are required" });
+        }
+
+        let logoUrl = null;
+
+        if (req.file) {
+            const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+            if (!cloudinaryResponse) {
+                return res.status(500).send({ "message": "Error uploading logo" });
+            }
+            logoUrl = cloudinaryResponse.secure_url;
+        }
+
+        const updatedData = { UserName, Email, Password, MobileNumber, BussinessAdress, CompanyName, Pincode };
+        if (logoUrl) {
+            updatedData.Logo = logoUrl
+        };
+
+        const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).send({ "message": "User not found" });
+        }
+
+        return res.status(200).send({ "message": "Profile updated successfully", user: updatedUser });
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        return res.status(500).send({ "message": "Internal Server Error" });
+    }
+};
+
+export {getProfile, addProfile, updateProfile}
