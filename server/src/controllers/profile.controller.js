@@ -54,9 +54,9 @@ const updateProfile = async (req, res) => {
     try {
         const userId = req.user.id;
 
-        const { UserName, Email, Password, MobileNumber, BussinessAdress, CompanyName, Pincode } = req.body;
+        const { UserName, BussinessAdress, CompanyName, Pincode } = req.body;
 
-        if (!UserName || !Email || !Password || !MobileNumber || !BussinessAdress || !CompanyName || !Pincode) {
+        if (!UserName || !BussinessAdress || !CompanyName || !Pincode) {
             return res.status(400).send({ "message": "All fields are required" });
         }
 
@@ -70,7 +70,7 @@ const updateProfile = async (req, res) => {
             logoUrl = cloudinaryResponse.secure_url;
         }
 
-        const updatedData = { UserName, Email, Password, MobileNumber, BussinessAdress, CompanyName, Pincode };
+        const updatedData = { UserName, BussinessAdress, CompanyName, Pincode };
         if (logoUrl) {
             updatedData.Logo = logoUrl
         };
