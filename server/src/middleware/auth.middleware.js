@@ -11,6 +11,8 @@ const authenticate = async (req, res, next) => {
         }
 
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        // console.log("decoded token", decodedToken);
+        
 
         if (!decodedToken) {
             return res.status(401).send({"message": "decoded token is required"});
@@ -22,7 +24,6 @@ const authenticate = async (req, res, next) => {
         if (!user) {
             return res.status(404).send({"message": "User not found"});
         }
-
         req.user = user;
         next();
     } catch (error) {
