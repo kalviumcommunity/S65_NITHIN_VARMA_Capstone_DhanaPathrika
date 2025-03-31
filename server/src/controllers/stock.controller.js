@@ -74,7 +74,6 @@ const updateStock = async (req, res) => {
         if (CostPrice < 1 || SellingPrice < 1 || AvailableQuantity < 1 || MinQuantity < 1) {
             return res.status(400).send({ "message": "Values must be greater than 0" });
         }
-
         const stockItem = await Stock.findOne({ _id: id, user: userId });
 
         if (!stockItem) {

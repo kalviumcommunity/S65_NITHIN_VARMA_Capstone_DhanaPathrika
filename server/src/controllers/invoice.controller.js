@@ -100,6 +100,7 @@ const updateInvoice = async (req, res) => {
         const invoice = await Invoice.findById(id);
         // console.log(invoice);
         
+        
         if (!invoice || invoice.user.toString() !== userId) {
             return res.status(404).send({ "message": "Invoice not found or unauthorized" });
         }
