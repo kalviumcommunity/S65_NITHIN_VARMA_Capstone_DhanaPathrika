@@ -19,6 +19,7 @@ const invoiceSchema = new Schema({
         default: Date.now()
     },
     PaymentMethod: String,
+    
     user: { type: Schema.Types.ObjectId, ref: "User" }
 });
 
