@@ -1,0 +1,18 @@
+meta {
+  name: login
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:4444/api/v1/user/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "NumberOrEmail": 9999900000,
+      "Password": "0987654321"
+  }
+}
