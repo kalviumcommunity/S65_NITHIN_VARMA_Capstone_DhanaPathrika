@@ -8,7 +8,8 @@ const userSchema = new Schema({
     CompanyName: String,
     Logo: String,
     BussinessAdress: String,
-    Pincode: Number
-})
+    Pincode: Number,
+    GoogleId: String
+},{timestamps: true})
 
 export const User = model("User", userSchema);
