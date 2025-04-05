@@ -41,6 +41,10 @@ import { googleAuth, googleAuthCallback, googleAuthSuccess } from './src/control
 app.get("/auth/google", googleAuth);
 app.get("/auth/google/callback", googleAuthCallback, googleAuthSuccess);
 
+app.get("/", (req, res) => {
+    res.send("API WORKING");
+})
+
 connectDB()
     .then(() => {
         app.listen(4444, () => {
