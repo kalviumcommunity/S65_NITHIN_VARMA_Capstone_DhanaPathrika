@@ -43,7 +43,7 @@ app.get("/auth/google/callback", googleAuthCallback, googleAuthSuccess);
 
 app.get("/", (req, res) => {
     res.send("API WORKING");
-}
+})
 
 connectDB()
     .then(() => {
