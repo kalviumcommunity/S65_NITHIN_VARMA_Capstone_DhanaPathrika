@@ -127,4 +127,4 @@ Ensure you have the following installed:
 
 For any questions, reach out at: nithinvarma411@gmail.com
 
-## BACKEND DEPLOYED LINK :- https://s65-nithin-varma-capstone-dhanapathrika.onrender.com/
+## BACKEND DEPLOYED LINK :- https://capstone-yq2t.onrender.com/
