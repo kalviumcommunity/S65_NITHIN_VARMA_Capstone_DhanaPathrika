@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import passport from 'passport';
 import session from 'express-session';
+import cron from 'node-cron';
+import axios from 'axios';
 
 const app = express();
 
@@ -44,6 +46,12 @@ app.get("/auth/google/callback", googleAuthCallback, googleAuthSuccess);
 app.get("/", (req, res) => {
     res.send("API WORKING");
 })
+
+cron.schedule('*/10 * * * *', () => {
+    axios.get(process.env.BACKEND_URL)
+        .then(() => console.log('✅ Pinged self to stay awake'))
+        .catch(err => console.error('❌ Ping failed:', err.message));
+});
 
 connectDB()
     .then(() => {
